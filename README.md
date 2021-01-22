@@ -29,7 +29,7 @@ Inspect.printDumpTable(orgRepos.map((x:any) => ({
 })).slice(0, 10));
 ```
 
-That can be run with:
+Run with:
 
     $ deno run --allow-net=api.github.com --unstable index.ts
 

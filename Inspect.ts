@@ -28,7 +28,7 @@ export class Inspect {
 
     static dumpTable(rows: any[]): String {
         let mapRows = rows;
-        let keys = Inspect._allKeys(mapRows);
+        let keys = Inspect.allKeys(mapRows);
         let colSizes: { [id: string]: number } = {};
 
         keys.forEach(k => {
@@ -55,7 +55,7 @@ export class Inspect {
         sb.push(`+${dashes}+`);
         let head = '|';
         keys.forEach((k) => {
-            head += Inspect._alignCenter(k, colSizes[k]) + '|';
+            head += Inspect.alignCenter(k, colSizes[k]) + '|';
         });
         sb.push(head);
         sb.push(`|${dashes}|`);
@@ -63,7 +63,7 @@ export class Inspect {
         mapRows.forEach(row => {
             let to = '|';
             keys.forEach(k => {
-                to += '' + Inspect._alignAuto(row[k], colSizes[k]) + '|';
+                to += '' + Inspect.alignAuto(row[k], colSizes[k]) + '|';
             });
             sb.push(to);
         });
@@ -77,7 +77,7 @@ export class Inspect {
         console.log(Inspect.dumpTable(rows));
     }
 
-    static _allKeys(rows: any[]): string[] {
+    static allKeys(rows: any[]): string[] {
         let to: string[] = [];
         rows.forEach(o => Object.keys(o).forEach((key: any) => {
             let k = `${key}`;
@@ -88,37 +88,36 @@ export class Inspect {
         return to;
     }
 
-    static _alignLeft(str: string, len: number, pad: string = ' '): string {
+    static alignLeft(str: string, len: number, pad: string = ' '): string {
         if (len < 0) return '';
         let aLen = len + 1 - str.length;
         if (aLen <= 0) return str;
-        return pad + str + pad.repeat(len + 1 - str.length);
+        return pad + str + pad.repeat(aLen);
     }
 
-    static _alignCenter(str: string, len: number, pad: string = ' '): string {
+    static alignCenter(str: string, len: number, pad: string = ' '): string {
         if (len < 0) return '';
         str ??= '';
         let nLen = str.length;
         let half = Math.floor(len / 2 - nLen / 2);
         let odds = Math.abs((nLen % 2) - (len % 2));
-        len = str.length;
         return pad.repeat(half + 1) + str + pad.repeat(half + 1 + odds);
     }
 
-    static _alignRight(str: string, len: number, pad: string = ' '): string {
+    static alignRight(str: string, len: number, pad: string = ' '): string {
         if (len < 0) return '';
         let aLen = len + 1 - str.length;
         if (aLen <= 0) return str;
-        return pad.repeat(len + 1 - str.length) + str + pad;
+        return pad.repeat(aLen) + str + pad;
     }
 
-    static _alignAuto(obj: any, len: number, pad: string = ' '): string {
+    static alignAuto(obj: any, len: number, pad: string = ' '): string {
         let str = `${obj}`;
         if (str.length <= len) {
             if (typeof obj == 'number') {
-                return Inspect._alignRight(str, len, pad);
+                return Inspect.alignRight(str, len, pad);
             }
-            return Inspect._alignLeft(str, len, pad);
+            return Inspect.alignLeft(str, len, pad);
         }
         return str;
     }
